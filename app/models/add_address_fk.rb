@@ -1,0 +1,2 @@
+class AddAddressFk < ApplicationRecord
+end

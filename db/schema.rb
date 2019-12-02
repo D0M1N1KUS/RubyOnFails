@@ -10,51 +10,61 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20191202180547) do
+ActiveRecord::Schema.define(version: 20191202205240) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "adresy", force: :cascade do |t|
-    t.string "ulica"
-    t.string "miasto"
-    t.string "kod_pocztowy"
+  create_table "adresses", force: :cascade do |t|
+    t.string "street"
+    t.string "town"
+    t.string "postal_code"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "{:foreign_key=>\"fk_adres_zamieszkania\"}_id"
-    t.bigint "{:foreign_key=>\"fk_adres_zameldowania\"}_id"
-    t.index ["{:foreign_key=>\"fk_adres_zameldowania\"}_id"], name: "index_adresy_on_{:foreign_key=>\"fk_adres_zameldowania\"}_id"
-    t.index ["{:foreign_key=>\"fk_adres_zamieszkania\"}_id"], name: "index_adresy_on_{:foreign_key=>\"fk_adres_zamieszkania\"}_id"
   end
 
-  create_table "pracownicy", force: :cascade do |t|
-    t.string "stanowisko"
+  create_table "frauds", force: :cascade do |t|
+    t.string "reson"
+    t.string "authority"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
-  create_table "uzytkownicy", force: :cascade do |t|
-    t.string "imie"
-    t.string "nazwisko"
+  create_table "proposals", force: :cascade do |t|
+    t.string "decision"
+    t.string "loan_type"
+    t.date "date"
+    t.float "amount"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "users_fk"
+    t.integer "frauds_fk"
+    t.integer "staffs_fk"
+  end
+
+  create_table "staffs", force: :cascade do |t|
+    t.string "position"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "users", force: :cascade do |t|
+    t.string "name"
+    t.string "surname"
     t.string "pesel"
     t.string "login"
-    t.string "haslo"
-    t.integer "fk_adres_zamieszkania"
-    t.integer "fk_adres_zameldowania"
-    t.integer "fk_pracownicy"
+    t.string "password"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "mail_address_fk"
+    t.integer "home_address_fk"
+    t.integer "staffs_fk"
   end
 
-  create_table "wnioski", force: :cascade do |t|
-    t.string "decyzja"
-    t.string "typ_kredytu"
-    t.date "data"
-    t.float "kwota"
-    t.integer "fk_uzytkownicy"
-    t.integer "fk_pracownicy"
-    t.integer "fk_zgloszenia"
-  end
-
-  create_table "zgloszenia", force: :cascade do |t|
-    t.string "powod"
-    t.string "organ_scigania"
-  end
-
+  add_foreign_key "proposals", "frauds", column: "frauds_fk"
+  add_foreign_key "proposals", "staffs", column: "staffs_fk"
+  add_foreign_key "proposals", "users", column: "users_fk"
+  add_foreign_key "users", "adresses", column: "home_address_fk"
+  add_foreign_key "users", "adresses", column: "mail_address_fk"
+  add_foreign_key "users", "staffs", column: "staffs_fk"
 end
