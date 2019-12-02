@@ -15,11 +15,12 @@ Things you may want to cover:
   gem intsall pg
   ```
 
-* **Configuration**
-
+* **Configuration**</br>
+  
 * **Database creation**
 
   ```bash
+  rake db:migrate
   rake db:setup
   ```
 
